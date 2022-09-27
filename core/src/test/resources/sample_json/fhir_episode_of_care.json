@@ -1,0 +1,29 @@
+{
+  "id": "2f082d0f-70fa-4d90-abc8-27969fcaf4b2",
+  "meta": {
+    "profile": [
+      "http://endeavourhealth.org/fhir/StructureDefinition/primarycare-episode-of-care"
+    ]
+  },
+  "period": {
+    "start": "2011-07-29T00:00:00+00:00"
+  },
+  "status": "active",
+  "patient": {
+    "reference": "Patient/0ec97982-58a2-4065-b000-8cb13ae0cb3b"
+  },
+  "extension": [
+    {
+      "url": "http://endeavourhealth.org/fhir/StructureDefinition/primarycare-patient-registration-type-extension",
+      "valueCoding": {
+        "code": "R",
+        "system": "http://endeavourhealth.org/fhir/ValueSet/primarycare-patient-registration-type",
+        "display": "Regular/GMS"
+      }
+    }
+  ],
+  "resourceType": "EpisodeOfCare",
+  "managingOrganization": {
+    "reference": "Organization/8169a3f1-6743-4679-b7e3-eed13b136eda"
+  }
+}

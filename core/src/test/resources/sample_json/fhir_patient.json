@@ -1,0 +1,63 @@
+{
+  "id": "0ec97982-58a2-4065-b000-8cb13ae0cb3b",
+  "meta": {
+    "profile": [
+      "http://endeavourhealth.org/fhir/StructureDefinition/primarycare-patient"
+    ]
+  },
+  "name": [
+    {
+      "use": "official",
+      "text": "NAZARI, Fatin Haibaa (Ms)",
+      "given": [
+        "Fatin",
+        "Haibaa"
+      ],
+      "family": [
+        "Nazari"
+      ],
+      "prefix": [
+        "Ms"
+      ]
+    }
+  ],
+  "gender": "female",
+  "address": [
+    {
+      "id": "654817",
+      "use": "home",
+      "city": "Boston",
+      "line": [
+        "1 Leverett Road"
+      ],
+      "text": "1 Leverett Road, Boston, Lincolnshire, PE210EB",
+      "period": {
+        "start": "2014-10-03T14:43:06+00:00"
+      },
+      "district": "Lincolnshire",
+      "postalCode": "PE210EB"
+    }
+  ],
+  "birthDate": "1982-02-14",
+  "identifier": [
+    {
+      "use": "secondary",
+      "value": "114953",
+      "system": "http://tpp-uk.com/identifier/patient-id"
+    },
+    {
+      "use": "official",
+      "value": "9436027133",
+      "system": "http://fhir.nhs.net/Id/nhs-number"
+    }
+  ],
+  "careProvider": [
+    {
+      "reference": "Organization/8169a3f1-6743-4679-b7e3-eed13b136eda"
+    }
+  ],
+  "resourceType": "Patient",
+  "managingOrganization": {
+    "reference": "Organization/8169a3f1-6743-4679-b7e3-eed13b136eda"
+  }
+}

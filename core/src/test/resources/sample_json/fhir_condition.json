@@ -1,0 +1,52 @@
+{
+  "id": "44157a69-dd14-47a6-96ae-a6fdcd37f6c2",
+  "code": {
+    "text": "Acute Q wave infarction - anterolateral",
+    "coding": [
+      {
+        "code": "233827001",
+        "system": "http://snomed.info/sct",
+        "display": "Acute Q wave infarction - anterolateral (disorder)"
+      },
+      {
+        "code": "X200I",
+        "system": "http://read.info/ctv3",
+        "display": "Acute Q wave infarction - anterolateral"
+      }
+    ]
+  },
+  "meta": {
+    "profile": [
+      "http://endeavourhealth.org/fhir/StructureDefinition/primarycare-condition"
+    ]
+  },
+  "patient": {
+    "reference": "Patient/0ec97982-58a2-4065-b000-8cb13ae0cb3b"
+  },
+  "asserter": {
+    "reference": "Practitioner/6fb10b79-7197-4663-b3fa-3b417442bd64"
+  },
+  "encounter": {
+    "reference": "Encounter/6d44dd44-f1bf-49ef-81b8-c333c4a30c64"
+  },
+  "extension": [
+    {
+      "url": "http://endeavourhealth.org/fhir/StructureDefinition/primarycare-recorded-by-extension",
+      "valueReference": {
+        "reference": "Practitioner/6fb10b79-7197-4663-b3fa-3b417442bd64"
+      }
+    },
+    {
+      "url": "http://endeavourhealth.org/fhir/StructureDefinition/primarycare-recorded-date-extension",
+      "valueDateTime": "2013-07-10T00:00:00+00:00"
+    },
+    {
+      "url": "http://endeavourhealth.org/fhir/StructureDefinition/primarycare-problem-episodicity",
+      "valueString": "Ongoing Episode"
+    }
+  ],
+  "dateRecorded": "2013-07-10",
+  "resourceType": "Condition",
+  "onsetDateTime": "2013-07-10T00:00:00+00:00",
+  "verificationStatus": "confirmed"
+}

@@ -1,0 +1,54 @@
+{
+  "id": "6fb10b79-7197-4663-b3fa-3b417442bd64",
+  "meta": {
+    "profile": [
+      "http://endeavourhealth.org/fhir/StructureDefinition/primarycare-practitioner"
+    ]
+  },
+  "name": {
+    "use": "official",
+    "text": "Dr P  Harris"
+  },
+  "active": true,
+  "identifier": [
+    {
+      "value": "2343567",
+      "system": "http://tpp-uk.com/identifier/staff-username"
+    },
+    {
+      "value": "3484012",
+      "system": "http://endeavourhealth.org/fhir/Identifier/gmc-number"
+    },
+    {
+      "value": "950832",
+      "system": "http://endeavourhealth.org/fhir/Identifier/doctor-index-number"
+    },
+    {
+      "value": "5H9 950832",
+      "system": "http://tpp-uk.com/identifier/staff-gp-local-code"
+    },
+    {
+      "value": "G9508325",
+      "system": "http://endeavourhealth.org/fhir/Identifier/gmp-ppd-code"
+    }
+  ],
+  "resourceType": "Practitioner",
+  "practitionerRole": [
+    {
+      "role": {
+        "coding": [
+          {
+            "system": "http://fhir.nhs.net/ValueSet/sds-job-role-name-1-0",
+            "display": "GP Senior Partner"
+          }
+        ]
+      },
+      "period": {
+        "start": "2014-10-03T00:00:00+00:00"
+      },
+      "managingOrganization": {
+        "reference": "Organization/79ad284a-aedb-4793-bae8-686322e7bbd5"
+      }
+    }
+  ]
+}

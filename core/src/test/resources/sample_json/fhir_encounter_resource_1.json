@@ -1,0 +1,86 @@
+{
+  "id": "0a2862c9-ea2f-4f2a-b9f0-0fd08f023b50",
+  "meta": {
+    "profile": [
+      "http://endeavourhealth.org/fhir/StructureDefinition/primarycare-encounter"
+    ]
+  },
+  "period": {
+    "start": "2006-01-23T00:00:00+00:00"
+  },
+  "status": "finished",
+  "patient": {
+    "reference": "Patient/0ec97982-58a2-4065-b000-8cb13ae0cb3b"
+  },
+  "location": [
+    {
+      "location": {
+        "reference": "Location/d98e2404-0122-464d-a212-28de00648da9"
+      }
+    }
+  ],
+  "contained": [
+    {
+      "id": "Items",
+      "entry": [
+        {
+          "item": {
+            "reference": "Condition/75397a8e-ea32-4402-8c72-a731bca6e6f1"
+          }
+        }
+      ],
+      "resourceType": "List"
+    }
+  ],
+  "extension": [
+    {
+      "url": "http://endeavourhealth.org/fhir/StructureDefinition/primarycare-recorded-date-extension",
+      "valueDateTime": "2006-01-23T00:00:00+00:00"
+    },
+    {
+      "url": "http://endeavourhealth.org/fhir/StructureDefinition/primarycare-recorded-by-extension",
+      "valueReference": {
+        "reference": "Practitioner/6fb10b79-7197-4663-b3fa-3b417442bd64"
+      }
+    },
+    {
+      "url": "http://endeavourhealth.org/fhir/StructureDefinition/primarycare-encounter-components-extension",
+      "valueReference": {
+        "reference": "#Items"
+      }
+    },
+    {
+      "url": "http://endeavourhealth.org/fhir/StructureDefinition/primarycare-encounter-source",
+      "valueCodeableConcept": {
+        "text": "Clinical"
+      }
+    }
+  ],
+  "participant": [
+    {
+      "type": [
+        {
+          "coding": [
+            {
+              "code": "PPRF",
+              "system": "http://hl7.org/fhir/ValueSet/encounter-participant-type",
+              "display": "primary performer"
+            }
+          ]
+        }
+      ],
+      "individual": {
+        "reference": "Practitioner/6fb10b79-7197-4663-b3fa-3b417442bd64"
+      }
+    }
+  ],
+  "resourceType": "Encounter",
+  "episodeOfCare": [
+    {
+      "reference": "EpisodeOfCare/2f082d0f-70fa-4d90-abc8-27969fcaf4b2"
+    }
+  ],
+  "serviceProvider": {
+    "reference": "Organization/79ad284a-aedb-4793-bae8-686322e7bbd5"
+  }
+}

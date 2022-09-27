@@ -1,0 +1,31 @@
+{
+  "id": "d98e2404-0122-464d-a212-28de00648da9",
+  "meta": {
+    "profile": [
+      "http://endeavourhealth.org/fhir/StructureDefinition/primarycare-location"
+    ]
+  },
+  "name": "Bury Ambulance Station",
+  "address": {
+    "use": "work",
+    "city": "Bury",
+    "line": [
+      "Cemetery Road",
+      "Ramsbottom"
+    ],
+    "text": "Cemetery Road, Ramsbottom, Bury, Lancashire, BL09PU",
+    "district": "Lancashire",
+    "postalCode": "BL09PU"
+  },
+  "identifier": [
+    {
+      "use": "official",
+      "value": "RMA10",
+      "system": "http://fhir.nhs.net/Id/ods-organization-code"
+    }
+  ],
+  "resourceType": "Location",
+  "managingOrganization": {
+    "reference": "Organization/8169a3f1-6743-4679-b7e3-eed13b136eda"
+  }
+}
