@@ -1,5 +1,7 @@
 package org.endeavourhealth.dao;
 
+import org.endeavourhealth.support.PersistenceAccess;
+import org.endeavourhealth.support.PersistenceAccessImpl;
 import org.endeavourhealth.tables.records.GraphLabelRecord;
 
 import java.util.UUID;

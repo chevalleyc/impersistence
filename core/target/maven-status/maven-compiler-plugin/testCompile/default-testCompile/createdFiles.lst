@@ -1,6 +1,0 @@
-org/endeavourhealth/support/FhirTestDataJson.class
-org/endeavourhealth/visitor/ArbitraryJsonTest.class
-org/endeavourhealth/visitor/properties/ReferenceTest.class
-org/endeavourhealth/visitor/FhirResourceVisitorTest.class
-org/endeavourhealth/support/KebabStringTest.class
-org/endeavourhealth/visitor/properties/ExtensionTest.class

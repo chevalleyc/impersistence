@@ -1,5 +1,6 @@
 package org.endeavourhealth.dao;
 
+import org.endeavourhealth.support.PersistenceAccess;
 import org.endeavourhealth.tables.records.NodeRecord;
 import org.endeavourhealth.visitor.ResourceVisitor;
 import org.jooq.JSONB;
@@ -100,8 +101,13 @@ public class NodeImpl implements Node {
     }
 
     @Override
+    public boolean isEmpty(){
+        return Objects.isNull(nodeRecord);
+    }
+
+    @Override
     public UUID store(){
-        nodeRecord.setCreatedTs(Timestamp.valueOf(LocalDateTime.now()));
+        nodeRecord.setSysTransaction(Timestamp.valueOf(LocalDateTime.now()));
         nodeRecord.store();
         return nodeRecord.getId();
     }
@@ -109,6 +115,13 @@ public class NodeImpl implements Node {
     @Override
     public Integer delete(UUID id){
         return persistenceAccess.context().deleteFrom(NODE).where(NODE.ID.eq(id)).execute();
+    }
+
+    @Override
+    public Node retrieve(UUID uuid){
+         NodeImpl node = new NodeImpl(persistenceAccess);
+         node.nodeRecord = persistenceAccess.context().fetchOne(NODE, NODE.ID.eq(uuid));
+         return node;
     }
 
     //TODO: to be implemented

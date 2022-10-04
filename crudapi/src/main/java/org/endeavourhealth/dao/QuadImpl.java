@@ -1,5 +1,7 @@
 package org.endeavourhealth.dao;
 
+import org.endeavourhealth.support.PersistenceAccess;
+import org.endeavourhealth.support.PersistenceAccessImpl;
 import org.endeavourhealth.tables.records.QuadRecord;
 import org.endeavourhealth.visitor.ResourceVisitor;
 
@@ -16,7 +18,7 @@ public class QuadImpl implements Quad{
     private final PersistenceAccess persistenceAccess;
     private final Optional<String> graphLabel;
 
-    public QuadImpl(PersistenceAccess persistenceAccess, Optional<String> graphLabel) {
+    public QuadImpl(PersistenceAccessImpl persistenceAccess, Optional<String> graphLabel) {
         this.persistenceAccess = persistenceAccess;
         this.graphLabel = graphLabel;
     }
@@ -52,7 +54,7 @@ public class QuadImpl implements Quad{
 
                                 //create predicate node
                                 UUID predicateNodeId =
-                                        new NodeImpl(persistenceAccess)
+                                        NodeFactory.getInstance(persistenceAccess)
                                                 .setName(name)
                                                 .setPersonId(resourceVisitor.getPersonRefId())
                                                 .setOrganizationId(resourceVisitor.getOrganizationRefId())

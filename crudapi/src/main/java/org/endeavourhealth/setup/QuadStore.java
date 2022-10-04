@@ -21,6 +21,7 @@ import org.springframework.jdbc.support.SQLExceptionTranslator;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 import javax.sql.DataSource;
+import java.sql.Connection;
 
 @Configuration
 @EnableTransactionManagement
@@ -99,6 +100,36 @@ public class QuadStore {
 
         DefaultConfiguration jooqConfiguration = new DefaultConfiguration();
         jooqConfiguration.set(connectionProvider());
+        jooqConfiguration.set(new DefaultExecuteListenerProvider(exceptionTransformer()));
+
+        jooqConfiguration.set(dialect);
+
+        return jooqConfiguration;
+    }
+
+    /**
+     * Use for test only (f.e. embedded pg in a docker container)
+     *
+     * @param connection
+     * @return
+     */
+    public DefaultConfiguration configuration(Connection connection) {
+
+        SQLDialect dialect;
+        String defaultDialect = "POSTGRES";
+
+        try {
+            dialect = SQLDialect.valueOf(defaultDialect);
+        } catch (Exception e){
+            throw  new IllegalArgumentException("only POSTGRES or YUGABYTEDB are supported");
+        }
+
+        //at the moment: SQLDialect.POSTGRES or SQLDialect.YUGABYTEDB
+        if (dialect != SQLDialect.POSTGRES && dialect != SQLDialect.YUGABYTEDB)
+            throw new IllegalArgumentException("only SQLDialect.POSTGRES or SQLDialect.YUGABYTEDB are supported");
+
+        DefaultConfiguration jooqConfiguration = new DefaultConfiguration();
+        jooqConfiguration.setConnection(connection);
         jooqConfiguration.set(new DefaultExecuteListenerProvider(exceptionTransformer()));
 
         jooqConfiguration.set(dialect);

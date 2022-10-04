@@ -3,7 +3,7 @@
 -- These operations can not be run by Flyway as they require super user privileged
 -- and/or can not be installed inside a transaction.
 --
--- Extentions are installed in a separate schema called 'ext'
+-- Extensions are installed in a separate schema called 'ext'
 --
 -- For production servers these operations should be performed by a configuration
 -- management system.

@@ -29,9 +29,13 @@ public interface Node {
 
     Node setFromResource(ResourceVisitor resourceVisitor);
 
+    boolean isEmpty();
+
     UUID store();
 
     Integer delete(UUID id);
+
+    Node retrieve(UUID uuid);
 
     //TODO: to be implemented
     Integer update(UUID id, NodeRecord nodeRecord);

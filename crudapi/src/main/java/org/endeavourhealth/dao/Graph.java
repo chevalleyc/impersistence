@@ -1,5 +1,6 @@
 package org.endeavourhealth.dao;
 
+import org.endeavourhealth.support.PersistenceAccessImpl;
 import org.endeavourhealth.visitor.ResourceFormat;
 import org.endeavourhealth.visitor.ResourceVisitor;
 import org.endeavourhealth.visitor.ResourceVisitorFactory;
@@ -9,10 +10,10 @@ import java.util.UUID;
 
 public class Graph {
 
-    private final PersistenceAccess persistenceAccess;
+    private final PersistenceAccessImpl persistenceAccess;
     private final Optional<String> graphLabel;
 
-    public Graph(PersistenceAccess persistenceAccess, Optional<String> graphLabel) {
+    public Graph(PersistenceAccessImpl persistenceAccess, Optional<String> graphLabel) {
         this.persistenceAccess = persistenceAccess;
         this.graphLabel = graphLabel;
     }
