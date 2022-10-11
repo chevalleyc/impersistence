@@ -1,5 +1,7 @@
 -- load the temporal_tables PLPG/SQL functions to emulate the coded extension
 -- original source: https://github.com/nearform/temporal_tables/blob/master/versioning_function.sql
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp" SCHEMA ext;
+
 CREATE OR REPLACE FUNCTION ext.versioning()
     RETURNS TRIGGER AS $$
 DECLARE
@@ -210,7 +212,7 @@ CREATE TABLE quadstore.node
 (
     id              UUID PRIMARY KEY DEFAULT ext.uuid_generate_v4(),
     person_id       UUID,
-    organisation_id UUID           NOT NULL,
+    organisation_id UUID,
     iri             TEXT,
     name            quadstore.coded_text NOT NULL,
     effective_date  TIMESTAMP,
@@ -275,3 +277,12 @@ ALTER TABLE quadstore.quad
     ADD CONSTRAINT label_id_fk FOREIGN KEY (label_id) REFERENCES quadstore.node (id);
 ALTER TABLE quadstore.quad
     ADD CONSTRAINT label_graph_id_fk FOREIGN KEY (label_id) REFERENCES quadstore.graph_label (id);
+
+-- referential integrity for non null person_id and organisation_id
+ALTER TABLE quadstore.node
+    ADD CONSTRAINT non_null_person_fk FOREIGN KEY (person_id) REFERENCES quadstore.node (id);
+
+ALTER TABLE quadstore.node
+    ADD CONSTRAINT non_null_organisation_fk FOREIGN KEY (organisation_id) REFERENCES quadstore.node (id);
+
+-- TODO: add check constraints as required (for person_id and organisation_id)

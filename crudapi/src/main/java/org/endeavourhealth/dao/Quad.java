@@ -6,5 +6,11 @@ import java.util.UUID;
 
 public interface Quad {
 
-    Integer create(UUID subjectId, ResourceVisitor resourceVisitor);
+    Integer persist(UUID subjectId, ResourceVisitor resourceVisitor);
+
+    UUID persist(Node subject, Node predicate, Node object);
+
+    UUID persist(UUID subjectId, UUID predicateId, UUID objectId);
+
+
 }
