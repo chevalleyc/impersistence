@@ -1,7 +1,6 @@
 package org.endeavourhealth.setup;
 
 
-import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
 import org.jooq.DSLContext;
 import org.jooq.ExecuteContext;
@@ -26,10 +25,11 @@ import java.sql.Connection;
 @Configuration
 @EnableTransactionManagement
 @PropertySource("classpath:application.yml")
-public class QuadStore {
+public class QuadStoreConfig {
 
 
     public class ExceptionTranslator implements ExecuteListener {
+        @Override
         public void exception(ExecuteContext context) {
             SQLDialect dialect = context.configuration().dialect();
             SQLExceptionTranslator translator = new SQLErrorCodeSQLExceptionTranslator(dialect.name());
@@ -49,9 +49,6 @@ public class QuadStore {
         dataSource.setJdbcUrl(environment.getRequiredProperty("url"));
         dataSource.setUsername(environment.getRequiredProperty("username"));
         dataSource.setPassword(environment.getRequiredProperty("password"));
-
-//        dataSource.setIdleTimeout(Long.valueOf(environment.getProperty("maxIdle")));
-//        dataSource.setMaximumPoolSize(Integer.valueOf(environment.getProperty("maxPoolSize") == null ? ));
 
         return dataSource;
     }

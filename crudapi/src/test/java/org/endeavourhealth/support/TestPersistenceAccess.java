@@ -4,13 +4,12 @@ import com.opentable.db.postgres.embedded.FlywayPreparer;
 import com.opentable.db.postgres.junit.EmbeddedPostgresRules;
 import com.opentable.db.postgres.junit.PreparedDbRule;
 import com.opentable.db.postgres.junit.SingleInstancePostgresRule;
-import org.endeavourhealth.setup.QuadStore;
+import org.endeavourhealth.setup.QuadStoreConfig;
 import org.jooq.DSLContext;
 import org.jooq.impl.DefaultConfiguration;
 import org.junit.Before;
 import org.junit.ClassRule;
 import org.junit.Rule;
-import org.junit.jupiter.api.Assertions;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
@@ -20,12 +19,12 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import static org.junit.jupiter.api.Assertions.fail;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(classes = {QuadStore.class})
+@ContextConfiguration(classes = {QuadStoreConfig.class})
 @TestPropertySource(properties = { "spring.config.location=classpath:application.yml" })
 
 public abstract class TestPersistenceAccess implements PersistenceAccess{
 
-    protected QuadStore quadstore;
+    protected QuadStoreConfig quadstore;
     protected DefaultConfiguration defaultConfiguration;
 
     @ClassRule
@@ -36,7 +35,7 @@ public abstract class TestPersistenceAccess implements PersistenceAccess{
     public SingleInstancePostgresRule pg = EmbeddedPostgresRules.singleInstance();
 
     @Autowired
-    public void setQuadstore(QuadStore quadstore){
+    public void setQuadstore(QuadStoreConfig quadstore){
         this.quadstore = quadstore;
     }
 
