@@ -208,6 +208,11 @@ create type quadstore.coded_text as
     term_mapping  TEXT[] -- array : match, purpose: value, terminology, code, target: terminology, code, delimited by '|'
 );
 
+CREATE TABLE quadstore.concept_hierarchy(
+      id uuid PRIMARY KEY DEFAULT ext.uuid_generate_v4(),
+      hierarchy TEXT[] NULL
+);
+
 CREATE TABLE quadstore.node
 (
     id              UUID PRIMARY KEY DEFAULT ext.uuid_generate_v4(),
@@ -261,6 +266,18 @@ CREATE TABLE quadstore.graph_label
     id          UUID PRIMARY KEY,
     name        TEXT NOT NULL,
     created_ts  TIMESTAMP NOT NULL DEFAULT current_timestamp
+);
+
+CREATE TABLE quadstore.concept_hierarchy_xref (
+      node_ref uuid NULL,
+      name varchar NULL,
+      code varchar NULL,
+      terminology varchar NULL,
+      hierarchy_ref uuid NULL,
+      id uuid NOT NULL,
+      CONSTRAINT concept_hierarchy_xref_pk PRIMARY KEY (id),
+      CONSTRAINT concept_hierarchy_xref_fk FOREIGN KEY (node_ref) REFERENCES quadstore.node(id),
+      CONSTRAINT concept_hierarchy_xref_fk_1 FOREIGN KEY (hierarchy_ref) REFERENCES quadstore.concept_hierarchy (id) ON DELETE CASCADE
 );
 
 CREATE UNIQUE INDEX quad_unique ON quadstore.quad (subject_id, predicate_id, object_id) WHERE label_id IS NULL;

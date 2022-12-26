@@ -7,11 +7,9 @@ import org.endeavourhealth.tables.records.QuadRecord;
 import org.junit.Assert;
 import org.junit.Test;
 
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.endeavourhealth.Tables.NODE_HISTORY;
 import static org.endeavourhealth.Tables.QUAD_HISTORY;
 
 public class TestGraphIT extends TestPersistenceAccess {
@@ -41,9 +39,9 @@ public class TestGraphIT extends TestPersistenceAccess {
         QuadRecord quadRecord = graph.retrieve(triple);
 
         //check data
-        assertThat(new Node(this).retrieve(quadRecord.getSubjectId()).getName().getValue()).isEqualTo("subject");
-        assertThat(new Node(this).retrieve(quadRecord.getPredicateId()).getName().getValue()).isEqualTo("predicate");
-        assertThat(new Node(this).retrieve(quadRecord.getObjectId()).getName().getValue()).isEqualTo("object");
+        assertThat(new Node(this).retrieveRecord(quadRecord.getSubjectId()).getName().getValue()).isEqualTo("subject");
+        assertThat(new Node(this).retrieveRecord(quadRecord.getPredicateId()).getName().getValue()).isEqualTo("predicate");
+        assertThat(new Node(this).retrieveRecord(quadRecord.getObjectId()).getName().getValue()).isEqualTo("object");
 
         //delete
         assertThat(graph.delete(triple)).isEqualTo(1);

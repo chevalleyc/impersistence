@@ -4,20 +4,24 @@ import com.google.gson.internal.LinkedTreeMap;
 import org.endeavourhealth.support.KebabString;
 import org.endeavourhealth.visitor.*;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.*;
 
 public class FhirResourceVisitor implements ResourceVisitor {
 
+    public static final String PERSON_REF_IDENTIFIER = "PERSON_REF_IDENTIFIER";
+    public static final String ORGANIZATION_REF_IDENTIFIER = "ORGANIZATION_REF_IDENTIFIER";
+    public static final String EXTENSION_IDENTIFIER = "EXTENSION_IDENTIFIER";
     private final ResourceFormat resourceFormat;
-    private ResourceBundle resourceBundle = ResourceBundle.getBundle("fhir_identifiers");
 
+    private static final String BUNDLE_ID = "fhir_identifiers";
+    
     private UUID resourceId;
     private TripleReference organizationRef;
     private TripleReference personRef;
     private String name;
-    private Optional<LocalDateTime> effectiveDate;
-    private String resource;
+    private String type;
+    private Optional<LocalDate> effectiveDate;
 
     private Extension extension;
 
@@ -31,13 +35,15 @@ public class FhirResourceVisitor implements ResourceVisitor {
 
     public FhirResourceVisitor traverse(String resource){
         arbitraryJson = JsonHandlerFactory.getInstance(resourceFormat, resource).generate();
-        resourceId = UUID.fromString((String) arbitraryJson.propertyValue(resourceBundle.getString("RESOURCE_ID_IDENTIFIER")));
-
+        
+        FhirBundleHandler fhirBundleHandler = new FhirBundleHandler(BUNDLE_ID, arbitraryJson);
+        
+        resourceId = UUID.fromString(fhirBundleHandler.propertyValue("RESOURCE_ID_IDENTIFIER"));
+        type = fhirBundleHandler.propertyValue("RESOURCE_TYPE");
         name = new KebabString(
                         Arrays.stream(
-                                arbitraryJson
-                                .propertyStructure(resourceBundle.getString("META_IDENTIFIER"))
-                                .propertyStructure(resourceBundle.getString("META_PROFILE_IDENTIFIER"))
+                                fhirBundleHandler.propertyStructure("META_IDENTIFIER")
+                                .propertyStructure(fhirBundleHandler.getKey("META_PROFILE_IDENTIFIER"))
                                 .getItem(0)
                                 .toString()
                                 .split("/")
@@ -47,28 +53,28 @@ public class FhirResourceVisitor implements ResourceVisitor {
 
         personRef = TripleReferenceFactory.getInstance(
                 resourceFormat,
-                resourceBundle.getString("PERSON_REF_IDENTIFIER"),
-                arbitraryJson.propertyStructure(resourceBundle.getString("PERSON_REF_IDENTIFIER"))
+                fhirBundleHandler.getKey(PERSON_REF_IDENTIFIER),
+                fhirBundleHandler.propertyStructure(PERSON_REF_IDENTIFIER)
         );
         organizationRef = TripleReferenceFactory.getInstance(
                 resourceFormat,
-                resourceBundle.getString("ORGANIZATION_REF_IDENTIFIER"),
-                arbitraryJson.propertyStructure(resourceBundle.getString("ORGANIZATION_REF_IDENTIFIER"))
+                fhirBundleHandler.getKey(ORGANIZATION_REF_IDENTIFIER),
+                fhirBundleHandler.propertyStructure(ORGANIZATION_REF_IDENTIFIER)
         );
 
         //delete the corresponding structure
-        arbitraryJson.deletePropertyStructure(resourceBundle.getString("RESOURCE_ID_IDENTIFIER"));
-        arbitraryJson.deletePropertyStructure(resourceBundle.getString("PERSON_REF_IDENTIFIER"));
-        arbitraryJson.deletePropertyStructure(resourceBundle.getString("ORGANIZATION_REF_IDENTIFIER"));
+        fhirBundleHandler.deletePropertyStructure("RESOURCE_ID_IDENTIFIER");
+        fhirBundleHandler.deletePropertyStructure(PERSON_REF_IDENTIFIER);
+        fhirBundleHandler.deletePropertyStructure(ORGANIZATION_REF_IDENTIFIER);
 
         //process extension
-        if (arbitraryJson.hasProperty(resourceBundle.getString("EXTENSION_IDENTIFIER"))){
-            extension = new Extension(resourceFormat, arbitraryJson.propertyStructure(resourceBundle.getString("EXTENSION_IDENTIFIER"))).extract();
-            arbitraryJson.deletePropertyStructure(resourceBundle.getString("EXTENSION_IDENTIFIER"));
+        if (arbitraryJson.hasProperty(fhirBundleHandler.getKey(EXTENSION_IDENTIFIER))){
+            extension = new Extension(resourceFormat, fhirBundleHandler.propertyStructure(EXTENSION_IDENTIFIER)).extract();
+            fhirBundleHandler.deletePropertyStructure(EXTENSION_IDENTIFIER);
         }
 
-        String effectiveDateAsString = (String)arbitraryJson.propertyValue(resourceBundle.getString("EFFECTIVE_DATE_IDENTIFIER"));
-        effectiveDate = effectiveDateAsString != null ? Optional.of(LocalDateTime.parse(effectiveDateAsString)) : Optional.empty();
+        String effectiveDateAsString = fhirBundleHandler.propertyValue("EFFECTIVE_DATE_IDENTIFIER");
+        effectiveDate = effectiveDateAsString != null ? Optional.of(new EffectiveDate(effectiveDateAsString).parse()) : Optional.empty();
 
         //push found references into list for DB resolution
         buildReferenceList();
@@ -83,7 +89,7 @@ public class FhirResourceVisitor implements ResourceVisitor {
     }
 
     @Override
-    public Optional<LocalDateTime> effectiveDate() {
+    public Optional<LocalDate> effectiveDate() {
         return effectiveDate;
     }
 
@@ -98,12 +104,14 @@ public class FhirResourceVisitor implements ResourceVisitor {
 
     private void mergeExtensionJson(ArbitraryJson extensionJson){
 
+        FhirBundleHandler fhirBundleHandler = new FhirBundleHandler(BUNDLE_ID, null);
+
         if (!extensionJson.isList()){
             throw new IllegalArgumentException("Incompatible structure to merge, extension must be a List");
         }
 
         if (extensionJson.size() > 0) {
-            arbitraryJson.addPropertyStructure(resourceBundle.getString("EXTENSION_IDENTIFIER"), extensionJson.toJEncodedJson());
+            arbitraryJson.addPropertyStructure(fhirBundleHandler.getKey(EXTENSION_IDENTIFIER), extensionJson.toJEncodedJson());
         }
     }
 
@@ -125,16 +133,15 @@ public class FhirResourceVisitor implements ResourceVisitor {
                         );
                         vaccumList.add(referenceName);
                     }
-                } catch (Exception e){}
+                } catch (Exception e){
+                    //do nothing
+                }
             }
         });
 
-        //repeat for extension references if any
-//        extension.referenceIterator().forEachRemaining(tripleReferences::add);
-
         //closure
-        for (String name: vaccumList){
-            arbitraryJson.deletePropertyStructure(name);
+        for (String nameFromVacuumList: vaccumList){
+            arbitraryJson.deletePropertyStructure(nameFromVacuumList);
         }
 
     }
@@ -187,5 +194,10 @@ public class FhirResourceVisitor implements ResourceVisitor {
     @Override
     public Iterator<TripleReference> referenceIterator(){
         return tripleReferences.iterator();
+    }
+
+    @Override
+    public String getType() {
+        return type;
     }
 }

@@ -1,6 +1,6 @@
 package org.endeavourhealth.visitor;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 import java.util.Iterator;
 import java.util.Optional;
 import java.util.UUID;
@@ -28,7 +28,9 @@ public interface ResourceVisitor {
 
     ResourceVisitor traverse(String resource);
 
-    Optional<LocalDateTime> effectiveDate();
+    Optional<LocalDate> effectiveDate();
 
     String getResourceType();
+
+    String getType();
 }

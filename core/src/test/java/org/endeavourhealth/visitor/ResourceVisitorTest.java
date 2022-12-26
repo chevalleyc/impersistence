@@ -25,7 +25,7 @@ class ResourceVisitorTest {
 
         assertNotNull(resourceVisitor.propertiesToJson());
 
-        assertEquals(3, resourceVisitor.referencesSize());
+        assertEquals(4, resourceVisitor.referencesSize());
         assertEquals(7, resourceVisitor.propertiesSize());
 
         assertEquals(UUID.fromString("44157a69-dd14-47a6-96ae-a6fdcd37f6c2"), resourceVisitor.getResourceId());
@@ -38,8 +38,9 @@ class ResourceVisitorTest {
         resourceVisitor.referenceIterator().forEachRemaining(tr -> tr.referenceIterator().forEachRemaining(il -> refUUIDs.add(il.getReferencedUUID())));
 
         assertThat(refUUIDs)
-                .hasSize(3)
+                .hasSize(4)
                 .containsExactlyInAnyOrder(
+                        UUID.fromString("0ec97982-58a2-4065-b000-8cb13ae0cb3b"),
                         UUID.fromString("6fb10b79-7197-4663-b3fa-3b417442bd64"),
                         UUID.fromString("6d44dd44-f1bf-49ef-81b8-c333c4a30c64"),
                         UUID.fromString("6fb10b79-7197-4663-b3fa-3b417442bd64")

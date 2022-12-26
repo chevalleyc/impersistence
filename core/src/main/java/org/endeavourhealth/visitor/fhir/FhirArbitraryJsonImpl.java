@@ -1,6 +1,7 @@
 package org.endeavourhealth.visitor.fhir;
 
 import com.google.gson.GsonBuilder;
+import java.util.Collections;
 import org.endeavourhealth.support.EncodeUtil;
 import org.endeavourhealth.visitor.ArbitraryJson;
 import org.endeavourhealth.visitor.JsonHandlerFactory;
@@ -13,8 +14,8 @@ import java.util.Set;
 
 public abstract class FhirArbitraryJsonImpl implements ArbitraryJson {
 
-    private String jsonStringOrigin;
-    private Object pojoJson;
+    protected String jsonStringOrigin;
+    protected Object pojoJson;
     private ResourceFormat fhirVersion;
 
     protected FhirArbitraryJsonImpl(ResourceFormat version, String jsonAsString) {
@@ -35,9 +36,7 @@ public abstract class FhirArbitraryJsonImpl implements ArbitraryJson {
                 isList = true;
         }
 
-        Object mapFromJson = gsondb.create().fromJson(jsonStringOrigin, isList ? List.class : Map.class);
-
-        return mapFromJson;
+       return gsondb.create().fromJson(jsonStringOrigin, isList ? List.class : Map.class);
     }
 
     @Override
@@ -71,7 +70,7 @@ public abstract class FhirArbitraryJsonImpl implements ArbitraryJson {
         if (isMap())
             return ((Map)pojoJson).keySet();
 
-        return null;
+        return Collections.emptySet();
     }
 
     @Override
@@ -112,20 +111,17 @@ public abstract class FhirArbitraryJsonImpl implements ArbitraryJson {
 
     @Override
     public ArbitraryJson deletePropertyStructure(String name){
-        if (isMap()) {
-            if (propertyStructure(name) != null) {
+        if (isMap() && propertyStructure(name) != null) {
                  ((Map)pojoJson).remove(name);
-            }
+
         }
         return JsonHandlerFactory.getInstance(fhirVersion,pojoJson);
     }
 
     @Override
     public ArbitraryJson addPropertyStructure(String name, Object value){
-        if (isMap()) {
-            if (propertyStructure(name) != null) {
+        if (isMap() && propertyStructure(name) != null) {
                 ((Map)pojoJson).put(name, value);
-            }
         }
         return JsonHandlerFactory.getInstance(fhirVersion, pojoJson);
     }
@@ -169,7 +165,7 @@ public abstract class FhirArbitraryJsonImpl implements ArbitraryJson {
             //iterates
             boolean hasProperty = true;
             for (Object item: ((List)pojoJson)){
-                hasProperty = hasProperty & JsonHandlerFactory.getInstance(fhirVersion, item).hasProperty(reference_key);
+                hasProperty = hasProperty && JsonHandlerFactory.getInstance(fhirVersion, item).hasProperty(reference_key);
             }
             return hasProperty;
         }

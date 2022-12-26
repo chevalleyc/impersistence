@@ -1,6 +1,6 @@
 package org.endeavourhealth.visitor.properties;
 
-import org.endeavourhealth.visitor.fhir.FhirArbitraryJsonImpl;
+import org.endeavourhealth.visitor.ArbitraryJson;
 
 public class CodeItem {
 
@@ -8,15 +8,28 @@ public class CodeItem {
     private String system;
     private String display;
 
-    private FhirArbitraryJsonImpl codeJson;
+    private ArbitraryJson codeJson;
 
-    public CodeItem(FhirArbitraryJsonImpl codeJson) {
+    public CodeItem(ArbitraryJson codeJson) {
         this.codeJson = codeJson;
     }
 
-    public void extract(){
+    public CodeItem extract(){
         code = (String) codeJson.propertyValue("code");
         system = (String) codeJson.propertyValue("system");
         display = (String) codeJson.propertyValue("display");
+        return this;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public String getSystem() {
+        return system;
+    }
+
+    public String getDisplay() {
+        return display;
     }
 }

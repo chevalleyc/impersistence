@@ -7,6 +7,7 @@ import org.endeavourhealth.tables.records.NodeRecord;
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.UUID;
 
@@ -48,7 +49,7 @@ public class TestNodeIT extends TestPersistenceAccess {
         node.setOrganisationId(DummyNodes.organisation(this));
         node.setPersonId(DummyNodes.person(this));
         node.setName("test node");
-        node.setEffectiveDate(LocalDateTime.now());
+        node.setEffectiveDate(LocalDate.now());
         node.setType(1234);
         node.setProperties("{\"a\":\"b\"}");
         UUID nodeId = node.persist();
@@ -65,7 +66,7 @@ public class TestNodeIT extends TestPersistenceAccess {
         node.setOrganisationId(UUID.randomUUID());
         node.setPersonId(UUID.randomUUID());
         node.setName("test node");
-        node.setEffectiveDate(LocalDateTime.now());
+        node.setEffectiveDate(LocalDate.now());
         node.setType(1234);
         node.setProperties("{\"a\":\"b\"}");
         try {
