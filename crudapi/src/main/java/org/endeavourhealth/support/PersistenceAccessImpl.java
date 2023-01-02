@@ -3,7 +3,9 @@ package org.endeavourhealth.support;
 import org.endeavourhealth.setup.QuadStoreConfig;
 import org.jooq.DSLContext;
 
-public class PersistenceAccessImpl implements PersistenceAccess {
+import java.io.Serializable;
+
+public class PersistenceAccessImpl implements PersistenceAccess, Serializable {
 
     private final QuadStoreConfig quadStoreConfig;
 

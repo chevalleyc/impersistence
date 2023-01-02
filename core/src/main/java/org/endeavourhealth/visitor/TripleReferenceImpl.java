@@ -1,6 +1,8 @@
 package org.endeavourhealth.visitor;
 
 import org.endeavourhealth.visitor.properties.ReferencedItem;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.*;
 
@@ -12,6 +14,8 @@ public abstract class TripleReferenceImpl implements TripleReference {
     protected ArbitraryJson referenceJson;
     protected List<ReferencedItem> referencedItemList = new ArrayList<>();
     protected String referenceName;
+
+    protected Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
     @Override
     public boolean isReference(){
@@ -44,7 +48,7 @@ public abstract class TripleReferenceImpl implements TripleReference {
             if (referenceValue != null)
                 referencedItemList.add(new ReferencedItem(referenceName, referenceValue.split("/")[0], UUID.fromString(referenceValue.split("/")[1])));
         } catch (Exception e){
-            throw new IllegalArgumentException("malformed reference parsable:"+referenceValue);
+            logger.warn("malformed reference parsable:"+referenceValue+"in:"+referenceJson.toString());
         }
 
         return this;

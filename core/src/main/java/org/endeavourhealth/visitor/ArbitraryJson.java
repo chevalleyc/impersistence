@@ -51,4 +51,6 @@ public interface ArbitraryJson {
     Object toJEncodedJson();
 
     void merge(ArbitraryJson anotherArbitraryJson);
+
+    String toString();
 }

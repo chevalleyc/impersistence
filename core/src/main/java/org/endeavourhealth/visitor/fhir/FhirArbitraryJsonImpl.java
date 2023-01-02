@@ -16,7 +16,7 @@ public abstract class FhirArbitraryJsonImpl implements ArbitraryJson {
 
     protected String jsonStringOrigin;
     protected Object pojoJson;
-    private ResourceFormat fhirVersion;
+    private final ResourceFormat fhirVersion;
 
     protected FhirArbitraryJsonImpl(ResourceFormat version, String jsonAsString) {
         this.fhirVersion = version;
@@ -91,7 +91,10 @@ public abstract class FhirArbitraryJsonImpl implements ArbitraryJson {
 
     @Override
     public ArbitraryJson namedItem(String name){
-        return JsonHandlerFactory.getInstance(fhirVersion, ((Map)pojoJson).get(name));
+        if (pojoJson == null)
+            return null;
+        else
+            return JsonHandlerFactory.getInstance(fhirVersion, ((Map)pojoJson).get(name));
     }
 
     @Override
@@ -207,6 +210,11 @@ public abstract class FhirArbitraryJsonImpl implements ArbitraryJson {
             }
             ((List)pojoJson).addAll((List) anotherArbitraryJson.toJEncodedJson());
         }
+    }
+
+    @Override
+    public String toString(){
+        return jsonStringOrigin;
     }
 
 

@@ -79,11 +79,13 @@ public class FhirResourceVisitor implements ResourceVisitor {
         //push found references into list for DB resolution
         buildReferenceList();
 
-        //merge the "master" json with the remaining extension json if any
-        mergeExtensionJson(extension.extensionJson());
+        if (extension != null) {
+            //merge the "master" json with the remaining extension json if any
+            mergeExtensionJson(extension.extensionJson());
 
-        //and merge extension references into the master reference list
-        mergeExtensionReferences(extension);
+            //and merge extension references into the master reference list
+            mergeExtensionReferences(extension);
+        }
 
         return this;
     }

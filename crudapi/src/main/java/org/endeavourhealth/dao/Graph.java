@@ -7,7 +7,6 @@ import org.endeavourhealth.visitor.ResourceVisitor;
 import org.endeavourhealth.visitor.ResourceVisitorFactory;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.Optional;
 import java.util.UUID;
 
 import static org.endeavourhealth.Tables.QUAD;
@@ -69,6 +68,34 @@ public class Graph {
             throw new IllegalArgumentException("Couldn't interpret resource in context:"+e);
         }
 
+    }
+
+    public UUID create(Node subject, String predicateName, UUID objectId){
+
+        try {
+            //setup quad from resource
+            Quad quad = QuadFactory.getInstance(persistenceAccess, graphLabel);
+
+            //create a simple predicate node and persist the corresponding graph
+            return quad.persist(subject.getId(), new Node(persistenceAccess).setName(predicateName).persist(), objectId);
+        }
+        catch (Exception e){
+            throw new IllegalArgumentException("Couldn't interpret resource in context:"+e);
+        }
+    }
+
+    
+    public void shallowCreateFromReferences(Node subjectNode, ResourceVisitor resourceVisitor){
+        
+        //iterate identified valid reference and create the corresponding graph with subjectNodeId as subject UUID
+
+        resourceVisitor.referenceIterator().forEachRemaining(tripleReference -> {
+            String predicateName = tripleReference.getReferenceName();
+            tripleReference.referenceIterator().forEachRemaining(referencedItem -> {
+                create(subjectNode, predicateName, referencedItem.getReferencedUUID());
+            });
+        });
+        
     }
 
     public @Nullable QuadRecord retrieve(UUID tripleId){

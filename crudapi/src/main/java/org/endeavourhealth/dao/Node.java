@@ -30,15 +30,17 @@ public class Node extends NodeRecord {
         this.persistenceAccess = persistenceAccess;
     }
 
-    public void setName(String name, String terminologyId, String code){
+    public Node setName(String name, String terminologyId, String code){
         CodedText codedText = new CodedText(name);
         codedText.setTerminologyProps(terminologyId, code);
         setName(Objects.requireNonNull(codedText).record());
+        return this;
     }
 
-    public void setName(String name){
+    public Node setName(String name){
         CodedText codedText = new CodedText(name);
         setName(Objects.requireNonNull(codedText).record());
+        return this;
     }
 
     public String getNameValue(){
@@ -50,12 +52,13 @@ public class Node extends NodeRecord {
         setEffectiveDate(Timestamp.valueOf(localDate.atTime(LocalTime.of(0,0))));
     }
 
-    public void setProperties(String fromJson){
+    public Node setProperties(String fromJson){
         setProperties(JSONB.valueOf(fromJson));
+        return this;
     }
 
 
-    public void setFromResource(ResourceVisitor resourceVisitor){
+    public Node setFromResource(ResourceVisitor resourceVisitor){
         setId(resourceVisitor.getResourceId());
         setName(resourceVisitor.name());
         setPersonId(resourceVisitor.getPersonRefId());
@@ -64,6 +67,7 @@ public class Node extends NodeRecord {
             setEffectiveDate(resourceVisitor.effectiveDate().get());
 
         setProperties(JSONB.valueOf(resourceVisitor.propertiesToJson()));
+        return this;
     }
 
     public boolean isEmpty(){
@@ -75,8 +79,9 @@ public class Node extends NodeRecord {
         conceptExpanded.setExpanded(exandedAs);
     }
 
-    public void setConceptExpanded(ConceptExpanded conceptExpanded){
+    public Node setConceptExpanded(ConceptExpanded conceptExpanded){
         this.conceptExpanded = conceptExpanded;
+        return this;
     }
 
     public UUID persist(){
@@ -85,7 +90,9 @@ public class Node extends NodeRecord {
         for (Field field: this.fields())
             nodeRecord.setValue(field, this.getValue(field.getName()));
 
-        nodeRecord.setId(UUID.randomUUID());
+        if (nodeRecord.getId() == null)
+            nodeRecord.setId(UUID.randomUUID());
+
         nodeRecord.setSysTransaction(Timestamp.valueOf(LocalDateTime.now()));
         nodeRecord.store();
 
