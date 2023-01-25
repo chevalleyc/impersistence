@@ -34,8 +34,21 @@ public abstract class TripleReferenceImpl implements TripleReference {
 
 
         String referenceValue = null;
-        if (referenceJson.isReference())
-            referenceValue = (String) referenceJson.propertyValue(resourceBundle.getString(REFERENCE_KEY));
+        if (referenceJson.isReference()) {
+            if (referenceJson.isList()){
+                referenceJson.valuesIterator().forEachRemaining(item -> {
+                    try {
+                        String subReferenceValue = ((Map) item).get(resourceBundle.getString(REFERENCE_KEY)).toString();
+                        referencedItemList.add(new ReferencedItem(referenceName, subReferenceValue.split("/")[0], UUID.fromString(subReferenceValue.split("/")[1])));
+                    } catch (Exception e){
+                        logger.error(e.getMessage());
+                    }
+                });
+                return this;
+            }
+            else
+                referenceValue = (String) referenceJson.propertyValue(resourceBundle.getString(REFERENCE_KEY));
+        }
         else if (referenceJson.isExtensionReference()){
             ArbitraryJson subRef = referenceJson.propertyStructure(resourceBundle.getString("EXTENSION_VALUE_REFERENCE_IDENTIFIER"));
             if (subRef.isReference()){
@@ -66,7 +79,7 @@ public abstract class TripleReferenceImpl implements TripleReference {
 
     @Override
     public UUID getReferencedUUID(int index){
-        if (referencedItemList.size() == 0)
+        if (referencedItemList.isEmpty())
             return null;
 
         return referencedItemList.get(index).getReferencedUUID();

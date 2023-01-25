@@ -221,7 +221,7 @@ CREATE TABLE quadstore.node
     iri             TEXT,
     name            quadstore.coded_text NOT NULL,
     effective_date  TIMESTAMP,
-    type            INTEGER,
+    type            TEXT,
     feeder_audit    JSONB,
     properties      JSONB,
     sys_transaction   TIMESTAMP NOT NULL DEFAULT current_timestamp,
@@ -242,6 +242,7 @@ EXECUTE PROCEDURE ext.versioning('sys_period', 'quadstore.node_history', true);
 CREATE TABLE quadstore.quad
 (
     id           UUID PRIMARY KEY DEFAULT ext.uuid_generate_v4(),
+    predicate_name TEXT NOT NULL,
     subject_id   UUID NOT NULL,
     predicate_id UUID NOT NULL,
     object_id    UUID NOT NULL,
@@ -303,3 +304,26 @@ ALTER TABLE quadstore.node
     ADD CONSTRAINT non_null_organisation_fk FOREIGN KEY (organisation_id) REFERENCES quadstore.node (id);
 
 -- TODO: add check constraints as required (for person_id and organisation_id)
+CREATE INDEX node_type_ndx ON quadstore.node (type); -- speed up query on node type
+
+-- other indexes and functions following tests
+CREATE FUNCTION value_point_val(JSONB) RETURNS NUMERIC
+AS 'select cast(jsonb_path_query_first(
+                        $1,
+                        cast(''$.valueQuantity.value'' as jsonpath)
+                    )#>>''{}'' as numeric)'
+    LANGUAGE SQL
+    IMMUTABLE
+    RETURNS NULL ON NULL INPUT;
+
+-- to query on concepts
+CREATE INDEX idx_concepts ON quadstore.concept_hierarchy USING GIN(hierarchy);
+CREATE INDEX idx_hierarchy_code_terminology ON quadstore.concept_hierarchy_xref USING BTREE(code,terminology);
+
+-- for graph querying using simple predicate constructs
+create index idx_quad_predicate_subject on quadstore.quad USING BTREE(subject_id, predicate_name);
+create index idx_quad_predicate_object on quadstore.quad USING BTREE(object_id, predicate_name);
+
+-- the following indexes significantly speed up querying on specific observations for a patient
+create index idx_dbp on quadstore.node using BTREE(value_point_val(node.properties));
+create index idx_node_iri_patient on quadstore.node USING BTREE(person_id, iri);

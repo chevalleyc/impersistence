@@ -16,7 +16,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class ResourceVisitorTest {
 
     @Test
-    public void testResourceVisitor() throws IOException {
+    void testResourceVisitor() throws IOException {
 
         //get a sample resource
         String resource = IOUtils.toString(FhirTestDataJson.FHIR_CONDITION.getStream(), StandardCharsets.UTF_8);
@@ -46,6 +46,49 @@ class ResourceVisitorTest {
                         UUID.fromString("6fb10b79-7197-4663-b3fa-3b417442bd64")
                 );
 
+    }
+
+    @Test
+    void testResourceEncounterVisitor() throws IOException {
+
+        //get a sample resource
+        String resource = IOUtils.toString(FhirTestDataJson.FHIR_ENCOUNTER.getStream(), StandardCharsets.UTF_8);
+
+        ResourceVisitor resourceVisitor = ResourceVisitorFactory.getInstance(ResourceFormat.DSTU2).traverse(resource);
+
+        assertNotNull(resourceVisitor.propertiesToJson());
+
+        assertEquals(5, resourceVisitor.referencesSize());
+        assertEquals(8, resourceVisitor.propertiesSize());
+    }
+
+    @Test
+    void testResourceProcedureRequestVisitor() throws IOException {
+
+        //get a sample resource
+        String resource = IOUtils.toString(FhirTestDataJson.FHIR_PROCEDURE_REQUEST.getStream(), StandardCharsets.UTF_8);
+
+        ResourceVisitor resourceVisitor = ResourceVisitorFactory.getInstance(ResourceFormat.DSTU2).traverse(resource);
+
+        assertNotNull(resourceVisitor.propertiesToJson());
+
+        assertEquals(4, resourceVisitor.referencesSize());
+        assertEquals(7, resourceVisitor.propertiesSize());
+
+
+    }
+
+    @Test
+    void testResourceObservationVisitor() throws IOException {
+
+        //get a sample resource
+        String resource = IOUtils.toString(FhirTestDataJson.FHIR_OBSERVATION_SYSTOLIC_BLOOD_PRESSURE.getStream(), StandardCharsets.UTF_8);
+
+        ResourceVisitor resourceVisitor = ResourceVisitorFactory.getInstance(ResourceFormat.DSTU2).traverse(resource);
+
+        assertNotNull(resourceVisitor.propertiesToJson());
+
+        assertEquals(UUID.fromString("58b7cd45-cba6-4587-a1cf-957b39583988"), resourceVisitor.getPersonRefId());
     }
 
 }

@@ -31,7 +31,7 @@ public class TestGraphIT extends TestPersistenceAccess {
         UUID object = DummyNodes.arbitrary(this, "object", person, organisation);
 
         //triple
-        UUID triple = graph.create(subject, predicate, object);
+        UUID triple = graph.create(subject, predicate, "predicate", object);
 
         assertThat(triple).isNotNull();
 
@@ -58,7 +58,7 @@ public class TestGraphIT extends TestPersistenceAccess {
 
         try {
 
-            graph.create(UUID.randomUUID(), UUID.randomUUID(), UUID.randomUUID());
+            graph.create(UUID.randomUUID(), UUID.randomUUID(), "random", UUID.randomUUID());
 
             Assert.fail("Should have raise a integrity violation exception!");
         }

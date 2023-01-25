@@ -1,22 +1,22 @@
 package org.endeavourhealth.visitor.fhir;
 
 import com.google.gson.GsonBuilder;
-import java.util.Collections;
+
+import java.util.*;
+
 import org.endeavourhealth.support.EncodeUtil;
 import org.endeavourhealth.visitor.ArbitraryJson;
 import org.endeavourhealth.visitor.JsonHandlerFactory;
 import org.endeavourhealth.visitor.ResourceFormat;
-
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public abstract class FhirArbitraryJsonImpl implements ArbitraryJson {
 
     protected String jsonStringOrigin;
     protected Object pojoJson;
     private final ResourceFormat fhirVersion;
+    Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
     protected FhirArbitraryJsonImpl(ResourceFormat version, String jsonAsString) {
         this.fhirVersion = version;
@@ -36,7 +36,12 @@ public abstract class FhirArbitraryJsonImpl implements ArbitraryJson {
                 isList = true;
         }
 
-       return gsondb.create().fromJson(jsonStringOrigin, isList ? List.class : Map.class);
+        try {
+            return gsondb.create().fromJson(jsonStringOrigin, isList ? List.class : Map.class);
+        } catch (Exception e){
+            logger.error("could not process json input:"+jsonStringOrigin);
+            throw new IllegalArgumentException(e.getCause());
+        }
     }
 
     @Override
@@ -155,20 +160,22 @@ public abstract class FhirArbitraryJsonImpl implements ArbitraryJson {
             return ((Map)pojoJson).entrySet().iterator();
         }
 
-        throw new IllegalStateException("cannot create iterator on scalar");
+        logger.warn("cannot create iterator on scalar");
+        List<Object> dummyList = new ArrayList<>();
+        return dummyList.iterator();
     }
 
     @Override
-    public boolean hasProperty(String reference_key) {
+    public boolean hasProperty(String referenceKey) {
 
         if (isMap()) {
-                return ((Map)pojoJson).containsKey(reference_key);
+                return ((Map)pojoJson).containsKey(referenceKey);
         }
         else if (isList()){
             //iterates
             boolean hasProperty = true;
             for (Object item: ((List)pojoJson)){
-                hasProperty = hasProperty && JsonHandlerFactory.getInstance(fhirVersion, item).hasProperty(reference_key);
+                hasProperty = hasProperty && JsonHandlerFactory.getInstance(fhirVersion, item).hasProperty(referenceKey);
             }
             return hasProperty;
         }

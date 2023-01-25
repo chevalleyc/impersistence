@@ -50,7 +50,7 @@ public class TestNodeIT extends TestPersistenceAccess {
         node.setPersonId(DummyNodes.person(this));
         node.setName("test node");
         node.setEffectiveDate(LocalDate.now());
-        node.setType(1234);
+        node.setType("test");
         node.setProperties("{\"a\":\"b\"}");
         UUID nodeId = node.persist();
 
@@ -67,7 +67,7 @@ public class TestNodeIT extends TestPersistenceAccess {
         node.setPersonId(UUID.randomUUID());
         node.setName("test node");
         node.setEffectiveDate(LocalDate.now());
-        node.setType(1234);
+        node.setType("test");
         node.setProperties("{\"a\":\"b\"}");
         try {
             node.persist();

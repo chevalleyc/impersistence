@@ -13,6 +13,8 @@ public enum FhirTestDataJson {
     FHIR_ORGANIZATION("fhir organization", "fhir_organization.json"),
     FHIR_PATIENT("fhir patient", "fhir_patient.json"),
     FHIR_PRACTITIONER("fhir practitioner", "fhir_practitioner.json"),
+    FHIR_ENCOUNTER("fhir encounter", "fhir_encounter.json"),
+    FHIR_PROCEDURE_REQUEST("fhir procedure request", "fhir_procedure_request.json"),
     ;
 
     private final String filename;

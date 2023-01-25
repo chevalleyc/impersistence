@@ -26,7 +26,7 @@
         <database.port>5432</database.port>
         <database.user>postgres</database.user>
         <database.pass>postgres</database.pass>
-        <database.name>postgres</database.name>
+        <database.name>quadstore</database.name>
         <!-- Dependency Versions -->
         <commons-io.version>2.11.0</commons-io.version>
         <commons-lang3.version>3.12.0</commons-lang3.version>

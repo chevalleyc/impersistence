@@ -1,0 +1,54 @@
+{
+  "resourceType": "DiagnosticReport",
+  "id": "59e20d04-e44d-455c-8d7e-61c61392bfc8",
+  "meta": {
+    "profile": [
+      "http://endeavourhealth.org/fhir/StructureDefinition/primarycare-diagnostic-report"
+    ]
+  },
+  "extension": [
+    {
+      "url": "http://endeavourhealth.org/fhir/StructureDefinition/primarycare-diagnostic-report-filed-by-extension",
+      "valueReference": {
+        "reference": "Practitioner/b1608c27-d4cc-419c-acc5-1ace3fabf706"
+      }
+    },
+    {
+      "url": "http://endeavourhealth.org/fhir/StructureDefinition/primarycare-recorded-by-extension",
+      "valueReference": {
+        "reference": "Practitioner/6adcaa92-a240-487a-bf46-c7bacb1cc509"
+      }
+    },
+    {
+      "url": "http://endeavourhealth.org/fhir/StructureDefinition/primarycare-recorded-date-extension",
+      "valueDateTime": "2013-01-30T10:17:30+00:00"
+    }
+  ],
+  "status": "final",
+  "code": {
+    "coding": [
+      {
+        "system": "http://read.info/readv2",
+        "code": "44V..",
+        "display": "Glucose tolerance test"
+      },
+      {
+        "system": "http://snomed.info/sct",
+        "code": "113076002",
+        "display": "Glucose tolerance test (procedure)"
+      },
+      {
+        "system": "http://www.endeavourhealth.org/fhir/snomed-description",
+        "code": "803621000006115"
+      }
+    ],
+    "text": "Glucose tolerance test"
+  },
+  "subject": {
+    "reference": "Patient/17f039dd-3502-4aca-a0b9-05261f2bce78"
+  },
+  "encounter": {
+    "reference": "Encounter/d8ee75b2-1b1c-4bca-b187-e6f4847a561b"
+  },
+  "effectiveDateTime": "2005-02"
+}

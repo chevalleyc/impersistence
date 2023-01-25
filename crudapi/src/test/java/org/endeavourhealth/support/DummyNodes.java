@@ -16,7 +16,7 @@ public class DummyNodes {
         organisationNode.setName("Organisation"+ new Random().nextInt());
         organisationNode.setIri("http://endhealth.info/im#Organisation");
         organisationNode.setEffectiveDate(LocalDate.now());
-        organisationNode.setType(1234);
+        organisationNode.setType("test");
         organisationNode.setProperties("{\"a\":\"b\"}");
         return organisationNode.persist();
     }
@@ -26,7 +26,7 @@ public class DummyNodes {
         personNode.setName("Person"+new Random().nextInt());
         personNode.setIri("http://endhealth.info/im#Patient");
         personNode.setEffectiveDate(LocalDate.now());
-        personNode.setType(1234);
+        personNode.setType("test");
         personNode.setProperties("{\"a\":\"b\"}");
        return personNode.persist();
 
@@ -38,7 +38,7 @@ public class DummyNodes {
         node.setPersonId(DummyNodes.person(persistenceAccess));
         node.setName("test node");
         node.setEffectiveDate(LocalDate.now());
-        node.setType(1234);
+        node.setType("test");
         node.setProperties("{\"a\":\"b\"}");
        return node.persist();
     }
@@ -49,7 +49,7 @@ public class DummyNodes {
         node.setPersonId(personId);
         node.setName("test node");
         node.setEffectiveDate(LocalDate.now());
-        node.setType(1234);
+        node.setType("test");
         node.setProperties("{\"a\":\"b\"}");
         return node.persist();
     }
@@ -60,7 +60,7 @@ public class DummyNodes {
         node.setPersonId(personId);
         node.setName(name);
         node.setEffectiveDate(LocalDate.now());
-        node.setType(1234);
+        node.setType("test");
         node.setProperties("{\"a\":\"b\"}");
         return node.persist();
     }

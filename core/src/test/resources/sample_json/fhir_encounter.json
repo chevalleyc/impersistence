@@ -1,0 +1,86 @@
+{
+  "resourceType": "Encounter",
+  "id": "3185edeb-e274-43ef-ac8e-0d47b95f90b1",
+  "meta": {
+    "profile": [
+      "http://endeavourhealth.org/fhir/StructureDefinition/primarycare-encounter"
+    ]
+  },
+  "contained": [
+    {
+      "resourceType": "List",
+      "id": "Items",
+      "entry": [
+        {
+          "item": {
+            "reference": "Observation/ddd13f7f-f49a-45cd-b6e4-e33a22ebb9e8"
+          }
+        }
+      ]
+    }
+  ],
+  "extension": [
+    {
+      "url": "http://endeavourhealth.org/fhir/StructureDefinition/primarycare-recorded-date-extension",
+      "valueDateTime": "2014-12-03T00:00:00+00:00"
+    },
+    {
+      "url": "http://endeavourhealth.org/fhir/StructureDefinition/primarycare-recorded-by-extension",
+      "valueReference": {
+        "reference": "Practitioner/13f981b1-db01-49e6-8c11-28d1cce023c6"
+      }
+    },
+    {
+      "url": "http://endeavourhealth.org/fhir/StructureDefinition/primarycare-encounter-components-extension",
+      "valueReference": {
+        "reference": "#Items"
+      }
+    },
+    {
+      "url": "http://endeavourhealth.org/fhir/StructureDefinition/primarycare-encounter-source",
+      "valueCodeableConcept": {
+        "text": "Clinical"
+      }
+    }
+  ],
+  "status": "finished",
+  "patient": {
+    "reference": "Patient/f3a29c9d-3e12-4d1d-9ff1-b4b54d9a802e"
+  },
+  "episodeOfCare": [
+    {
+      "reference": "EpisodeOfCare/5a14666f-37c2-4d56-b95f-59f43a0e96e1"
+    }
+  ],
+  "participant": [
+    {
+      "type": [
+        {
+          "coding": [
+            {
+              "system": "http://hl7.org/fhir/ValueSet/encounter-participant-type",
+              "code": "PPRF",
+              "display": "primary performer"
+            }
+          ]
+        }
+      ],
+      "individual": {
+        "reference": "Practitioner/13f981b1-db01-49e6-8c11-28d1cce023c6"
+      }
+    }
+  ],
+  "period": {
+    "start": "2014-12-03T00:00:00+00:00"
+  },
+  "location": [
+    {
+      "location": {
+        "reference": "Location/c5dfa8ee-118e-453d-92ee-5cd7187948a1"
+      }
+    }
+  ],
+  "serviceProvider": {
+    "reference": "Organization/79ad284a-aedb-4793-bae8-686322e7bbd5"
+  }
+}

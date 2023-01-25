@@ -1,0 +1,32 @@
+{
+  "resourceType": "ProcedureRequest",
+  "id": "5167a36b-64e3-4ee3-9d33-43a7ceb40a92",
+  "meta": {
+    "profile": [
+      "http://endeavourhealth.org/fhir/StructureDefinition/primarycare-procedure-request"
+    ]
+  },
+  "subject": {
+    "reference": "Patient/e816fcbd-7e73-45b8-9c05-4eaf0e2c99e2"
+  },
+  "code": {
+    "text": "CHS 1 Year Exam Health Visitor"
+  },
+  "scheduledDateTime": "2018-04-24T00:00:00+00:00",
+  "encounter": {
+    "reference": "Encounter/2cfbfe69-1b90-4af9-afdd-845f7502bd7b"
+  },
+  "performer": {
+    "reference": "Practitioner/a0300942-3f98-49ec-bafd-0f7dc5cf8aab"
+  },
+  "status": "proposed",
+  "notes": [
+    {
+      "text": "Status: 2017-04-24 - Pending"
+    }
+  ],
+  "orderedOn": "2017-04-24T09:46:09+00:00",
+  "orderer": {
+    "reference": "Practitioner/a0300942-3f98-49ec-bafd-0f7dc5cf8aab"
+  }
+}

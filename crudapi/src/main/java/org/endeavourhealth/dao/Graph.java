@@ -6,15 +6,19 @@ import org.endeavourhealth.visitor.ResourceFormat;
 import org.endeavourhealth.visitor.ResourceVisitor;
 import org.endeavourhealth.visitor.ResourceVisitorFactory;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.UUID;
 
+import static org.endeavourhealth.Tables.NODE;
 import static org.endeavourhealth.Tables.QUAD;
 
 public class Graph {
 
     private final PersistenceAccess persistenceAccess;
     private final String graphLabel;
+    private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
 
     public Graph(PersistenceAccess persistenceAccess, String graphLabel) {
         this.persistenceAccess = persistenceAccess;
@@ -56,13 +60,13 @@ public class Graph {
 
     }
 
-    public UUID create(UUID subjectId, UUID predicateId, UUID objectId){
+    public UUID create(UUID subjectId, UUID predicateId, String predicateName, UUID objectId){
 
         try {
             //setup quad from resource
             Quad quad = QuadFactory.getInstance(persistenceAccess, graphLabel);
 
-            return quad.persist(subjectId, predicateId, objectId);
+            return quad.persist(subjectId, predicateId, predicateName, objectId);
         }
         catch (Exception e){
             throw new IllegalArgumentException("Couldn't interpret resource in context:"+e);
@@ -76,8 +80,9 @@ public class Graph {
             //setup quad from resource
             Quad quad = QuadFactory.getInstance(persistenceAccess, graphLabel);
 
+            //used to simplify querying
             //create a simple predicate node and persist the corresponding graph
-            return quad.persist(subject.getId(), new Node(persistenceAccess).setName(predicateName).persist(), objectId);
+            return quad.persist(subject.getId(), new Node(persistenceAccess).setName(predicateName).persist(), predicateName, objectId);
         }
         catch (Exception e){
             throw new IllegalArgumentException("Couldn't interpret resource in context:"+e);
@@ -92,6 +97,17 @@ public class Graph {
         resourceVisitor.referenceIterator().forEachRemaining(tripleReference -> {
             String predicateName = tripleReference.getReferenceName();
             tripleReference.referenceIterator().forEachRemaining(referencedItem -> {
+                if (!persistenceAccess.context().fetchExists(NODE, NODE.ID.eq(referencedItem.getReferencedUUID())))
+                    logger.warn("Subject:"+subjectNode.getNameValue()+" Predicate:"+predicateName+" with non existing object with id:"+referencedItem.getReferencedUUID());
+
+                StringBuilder stringBuilder = new StringBuilder().
+                        append("Quad: subject:").append(subjectNode.getId()).append("(").append(subjectNode.getType()).append(")").
+                        append(",").
+                        append("predicateName:").append(predicateName).append(",").
+                        append("object:").append(referencedItem.getReferencedUUID()).append("(").append(referencedItem.getReferencedItem()).append(")");
+
+                logger.debug(stringBuilder.toString());
+
                 create(subjectNode, predicateName, referencedItem.getReferencedUUID());
             });
         });
@@ -106,47 +122,5 @@ public class Graph {
         return persistenceAccess.context().deleteFrom(QUAD).where(QUAD.ID.eq(id)).execute();
     }
 
-
-    /**
-     * don't create a triple (subject, predicate, person) as it is implicit in the node class representation
-     * @param subjectId
-     * @param personId
-     * @return
-     */
-    public UUID createTriplePersonImplicitPredicate(UUID subjectId, UUID personId){
-
-        try {
-            //setup quad from resource
-            Quad quad = QuadFactory.getInstance(persistenceAccess, graphLabel);
-
-//            return quad.persist(subjectId, predicateId, objectId);
-        }
-        catch (Exception e){
-            throw new IllegalArgumentException("Couldn't interpret resource in context:"+e);
-        }
-
-        return null;
-    }
-
-    /**
-     * don't create a triple (subject, predicate, person) as it is implicit in the node class representation
-     * @param subjectId
-     * @param organisationId
-     * @return
-     */
-    public UUID createTripleOrganisationImplicitPredicate(UUID subjectId, UUID organisationId){
-
-        try {
-            //setup quad from resource
-            Quad quad = QuadFactory.getInstance(persistenceAccess, graphLabel);
-
-//            return quad.persist(subjectId, predicateId, objectId);
-            return null;
-        }
-        catch (Exception e){
-            throw new IllegalArgumentException("Couldn't interpret resource in context:"+e);
-        }
-
-    }
 }
 

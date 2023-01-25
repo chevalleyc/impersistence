@@ -10,7 +10,6 @@ public interface Quad {
 
     UUID persist(Node subject, Node predicate, Node object);
 
-    UUID persist(UUID subjectId, UUID predicateId, UUID objectId);
-
+    UUID persist(UUID subjectId, UUID predicateId, String predicateName, UUID objectId);
 
 }

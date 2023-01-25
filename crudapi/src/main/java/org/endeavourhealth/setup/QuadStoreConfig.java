@@ -7,7 +7,7 @@ import org.jooq.ExecuteContext;
 import org.jooq.ExecuteListener;
 import org.jooq.SQLDialect;
 import org.jooq.impl.*;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.EnvironmentAware;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
@@ -25,21 +25,23 @@ import java.sql.Connection;
 @Configuration
 @EnableTransactionManagement
 @PropertySource("classpath:application.yml")
-public class QuadStoreConfig {
+public class QuadStoreConfig implements EnvironmentAware {
 
+    private Environment environment;
+
+    @Override
+    public void setEnvironment(final Environment environment) {
+        this.environment = environment;
+    }
 
     public class ExceptionTranslator implements ExecuteListener {
         @Override
         public void exception(ExecuteContext context) {
             SQLDialect dialect = context.configuration().dialect();
             SQLExceptionTranslator translator = new SQLErrorCodeSQLExceptionTranslator(dialect.name());
-            context.exception(translator.translate("Access database using Jooq", context.sql(), context.sqlException()));
+            context.exception(translator.translate(context.exception().getMessage(), context.sql(), context.sqlException()));
         }
     }
-
-
-    @Autowired
-    private Environment environment;
 
     @Bean
     public DataSource dataSource() {

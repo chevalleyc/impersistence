@@ -1,8 +1,9 @@
 package org.endeavourhealth.visitor.fhir;
 
-import com.google.gson.internal.LinkedTreeMap;
 import org.endeavourhealth.support.KebabString;
 import org.endeavourhealth.visitor.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.time.LocalDate;
 import java.util.*;
@@ -15,6 +16,8 @@ public class FhirResourceVisitor implements ResourceVisitor {
     private final ResourceFormat resourceFormat;
 
     private static final String BUNDLE_ID = "fhir_identifiers";
+
+    private final Logger logger = LoggerFactory.getLogger(this.getClass().getName());
     
     private UUID resourceId;
     private TripleReference organizationRef;
@@ -124,7 +127,7 @@ public class FhirResourceVisitor implements ResourceVisitor {
         arbitraryJson.valuesIterator().forEachRemaining(value -> {
             if (value instanceof Map.Entry){
                 try {
-                    LinkedTreeMap.Entry<String, Object> mapEntry = (LinkedTreeMap.Entry) value;
+                    Map.Entry<String, Object> mapEntry = (Map.Entry) value;
                     String referenceName = mapEntry.getKey();
 
                     if (JsonHandlerFactory.getInstance(resourceFormat, mapEntry.getValue()).isReference()) {
@@ -136,7 +139,7 @@ public class FhirResourceVisitor implements ResourceVisitor {
                         vaccumList.add(referenceName);
                     }
                 } catch (Exception e){
-                    //do nothing
+                    logger.error(e.getMessage());
                 }
             }
         });

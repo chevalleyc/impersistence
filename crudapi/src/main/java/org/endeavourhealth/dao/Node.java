@@ -57,14 +57,15 @@ public class Node extends NodeRecord {
         return this;
     }
 
-
     public Node setFromResource(ResourceVisitor resourceVisitor){
         setId(resourceVisitor.getResourceId());
+        setType(resourceVisitor.getType());
         setName(resourceVisitor.name());
         setPersonId(resourceVisitor.getPersonRefId());
         setOrganisationId(resourceVisitor.getOrganizationRefId());
-        if (resourceVisitor.effectiveDate().isPresent())
-            setEffectiveDate(resourceVisitor.effectiveDate().get());
+        resourceVisitor.effectiveDate().ifPresent(
+                this::setEffectiveDate
+        );
 
         setProperties(JSONB.valueOf(resourceVisitor.propertiesToJson()));
         return this;

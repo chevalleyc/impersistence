@@ -1,12 +1,10 @@
 package org.endeavourhealth.dao;
 
 import org.endeavourhealth.support.PersistenceAccess;
-import org.endeavourhealth.support.PersistenceAccessImpl;
 import org.endeavourhealth.tables.records.QuadRecord;
 import org.endeavourhealth.visitor.ResourceVisitor;
 
 import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
@@ -32,7 +30,6 @@ public class QuadImpl implements Quad{
                 ref -> ref.referenceIterator().forEachRemaining(tr -> {
                             String name = tr.getName();
                             UUID objectUuid = tr.getReferencedUUID();
-                            String predicateName = tr.getReferencedItem();
                             QuadRecord quadRecord = persistenceAccess.context().newRecord(QUAD);
 
                             //check if object exists
@@ -76,16 +73,17 @@ public class QuadImpl implements Quad{
 
     @Override
     public UUID persist(Node subject, Node predicate, Node object) {
-        return persist(subject.getId(), predicate.getId(), object.getId());
+        return persist(subject.getId(), predicate.getId(), predicate.getNameValue(), object.getId());
     }
 
     @Override
-    public UUID persist(UUID subjectId, UUID predicateId, UUID objectId) {
+    public UUID persist(UUID subjectId, UUID predicateId, String predicateName, UUID objectId) {
         QuadRecord quadRecord = persistenceAccess.context().newRecord(QUAD);
         if (Objects.nonNull(graphLabel))
             quadRecord.setLabelId(new GraphLabel(persistenceAccess).getOrCreate(graphLabel));
         quadRecord.setSubjectId(subjectId);
         quadRecord.setPredicateId(predicateId);
+        quadRecord.setPredicateName(predicateName);
         quadRecord.setObjectId(objectId);
         quadRecord.store();
         return quadRecord.getId();
